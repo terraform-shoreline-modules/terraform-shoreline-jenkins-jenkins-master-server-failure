@@ -1,0 +1,190 @@
+{
+  "name": "jenkins_master_server_failure",
+  "description": "Jenkins is a popular automation server used in software development. The master server is the main node that controls the distribution of tasks to worker nodes. A failure in the Jenkins master server can cause a disruption in the automation pipeline, leading to delays in software development and deployment. This type of incident requires immediate attention to restore the Jenkins master server and resume normal operations.",
+  "params": [
+    {
+      "name": "JENKINS_DEPLOYMENT_NAME",
+      "value": ""
+    },
+    {
+      "name": "JENKINS_SERVICE_NAME",
+      "value": ""
+    },
+    {
+      "name": "JENKINS_APP_NAME",
+      "value": ""
+    },
+    {
+      "name": "JENKINS_NAMESPACE",
+      "value": ""
+    },
+    {
+      "name": "JENKINS_POD_NAME",
+      "value": ""
+    },
+    {
+      "name": "POD_NAME",
+      "value": ""
+    },
+    {
+      "name": "NAMESPACE",
+      "value": ""
+    },
+    {
+      "name": "K8S_CLUSTER_NAME",
+      "value": ""
+    }
+  ],
+  "cells": [
+    {
+      "name": "cell_1",
+      "type": "MARKDOWN",
+      "enabled": true,
+      "content": "## Jenkins Master Server Failure\nJenkins is a popular automation server used in software development. The master server is the main node that controls the distribution of tasks to worker nodes. A failure in the Jenkins master server can cause a disruption in the automation pipeline, leading to delays in software development and deployment. This type of incident requires immediate attention to restore the Jenkins master server and resume normal operations."
+    },
+    {
+      "name": "cell_2",
+      "type": "MARKDOWN",
+      "enabled": true,
+      "content": "## Get a list of all pods in the Jenkins namespace"
+    },
+    {
+      "name": "cell_3",
+      "type": "OP_LANG",
+      "enabled": true,
+      "content": "pod | k8s_cluster_name=$K8S_CLUSTER_NAME | app='shoreline' | limit=1 | random=1 | `kubectl get pods -n ${JENKINS_NAMESPACE}`"
+    },
+    {
+      "name": "cell_4",
+      "type": "MARKDOWN",
+      "enabled": true,
+      "content": "## Check the status of the Jenkins pod(s)"
+    },
+    {
+      "name": "cell_5",
+      "type": "OP_LANG",
+      "enabled": true,
+      "content": "pod | k8s_cluster_name=$K8S_CLUSTER_NAME | app='shoreline' | limit=1 | random=1 | `kubectl describe pods -n ${JENKINS_NAMESPACE} ${JENKINS_POD_NAME}`"
+    },
+    {
+      "name": "cell_6",
+      "type": "MARKDOWN",
+      "enabled": true,
+      "content": "## Check the logs of the Jenkins pod(s)"
+    },
+    {
+      "name": "cell_7",
+      "type": "OP_LANG",
+      "enabled": true,
+      "content": "pod | k8s_cluster_name=$K8S_CLUSTER_NAME | app='shoreline' | limit=1 | random=1 | `kubectl logs -n ${JENKINS_NAMESPACE} ${JENKINS_POD_NAME}`"
+    },
+    {
+      "name": "cell_8",
+      "type": "MARKDOWN",
+      "enabled": true,
+      "content": "## Check the events related to the Jenkins pod(s)"
+    },
+    {
+      "name": "cell_9",
+      "type": "OP_LANG",
+      "enabled": true,
+      "content": "pod | k8s_cluster_name=$K8S_CLUSTER_NAME | app='shoreline' | limit=1 | random=1 | `kubectl get events -n ${JENKINS_NAMESPACE} --sort-by=.metadata.creationTimestamp`"
+    },
+    {
+      "name": "cell_10",
+      "type": "MARKDOWN",
+      "enabled": true,
+      "content": "## Check the status of the Jenkins deployment"
+    },
+    {
+      "name": "cell_11",
+      "type": "OP_LANG",
+      "enabled": true,
+      "content": "pod | k8s_cluster_name=$K8S_CLUSTER_NAME | app='shoreline' | limit=1 | random=1 | `kubectl describe deployment -n ${JENKINS_NAMESPACE} ${JENKINS_DEPLOYMENT_NAME}`"
+    },
+    {
+      "name": "cell_12",
+      "type": "MARKDOWN",
+      "enabled": true,
+      "content": "## Check the replica set(s) of the Jenkins deployment"
+    },
+    {
+      "name": "cell_13",
+      "type": "OP_LANG",
+      "enabled": true,
+      "content": "pod | k8s_cluster_name=$K8S_CLUSTER_NAME | app='shoreline' | limit=1 | random=1 | `kubectl get rs -n ${JENKINS_NAMESPACE} --selector=app=${JENKINS_APP_NAME}`"
+    },
+    {
+      "name": "cell_14",
+      "type": "MARKDOWN",
+      "enabled": true,
+      "content": "## Check the status of the Jenkins service(s)"
+    },
+    {
+      "name": "cell_15",
+      "type": "OP_LANG",
+      "enabled": true,
+      "content": "pod | k8s_cluster_name=$K8S_CLUSTER_NAME | app='shoreline' | limit=1 | random=1 | `kubectl describe service -n ${JENKINS_NAMESPACE} ${JENKINS_SERVICE_NAME}`"
+    },
+    {
+      "name": "cell_16",
+      "type": "MARKDOWN",
+      "enabled": true,
+      "content": "## Check the network policies affecting the Jenkins pod(s)"
+    },
+    {
+      "name": "cell_17",
+      "type": "OP_LANG",
+      "enabled": true,
+      "content": "pod | k8s_cluster_name=$K8S_CLUSTER_NAME | app='shoreline' | limit=1 | random=1 | `kubectl get networkpolicy -n ${JENKINS_NAMESPACE} --selector=app=${JENKINS_APP_NAME}`"
+    },
+    {
+      "name": "cell_18",
+      "type": "MARKDOWN",
+      "enabled": true,
+      "content": "## Check the storage volume(s) used by the Jenkins pod(s)"
+    },
+    {
+      "name": "cell_19",
+      "type": "OP_LANG",
+      "enabled": true,
+      "content": "pod | k8s_cluster_name=$K8S_CLUSTER_NAME | app='shoreline' | limit=1 | random=1 | `kubectl describe pod -n ${JENKINS_NAMESPACE} ${JENKINS_POD_NAME} | grep -i volume`"
+    },
+    {
+      "name": "cell_20",
+      "type": "MARKDOWN",
+      "enabled": true,
+      "content": "## Check the resource usage of the Jenkins pod(s)"
+    },
+    {
+      "name": "cell_21",
+      "type": "OP_LANG",
+      "enabled": true,
+      "content": "pod | k8s_cluster_name=$K8S_CLUSTER_NAME | app='shoreline' | limit=1 | random=1 | `kubectl top pod -n ${JENKINS_NAMESPACE} ${JENKINS_POD_NAME}`"
+    },
+    {
+      "name": "cell_22",
+      "type": "MARKDOWN",
+      "enabled": true,
+      "content": "## Check the node(s) where the Jenkins pod(s) are running"
+    },
+    {
+      "name": "cell_23",
+      "type": "OP_LANG",
+      "enabled": true,
+      "content": "pod | k8s_cluster_name=$K8S_CLUSTER_NAME | app='shoreline' | limit=1 | random=1 | `kubectl get pods -n ${JENKINS_NAMESPACE} -o wide`"
+    },
+    {
+      "name": "cell_24",
+      "type": "MARKDOWN",
+      "enabled": true,
+      "content": "## Restart the Jenkins server to see if it's a temporary issue."
+    },
+    {
+      "name": "cell_25",
+      "type": "OP_LANG",
+      "enabled": true,
+      "content": "pod | k8s_cluster_name=$K8S_CLUSTER_NAME | app='shoreline' | random=1 | limit=1 | invoke_delete_pod($POD_NAME, $NAMESPACE)"
+    }
+  ]
+}
